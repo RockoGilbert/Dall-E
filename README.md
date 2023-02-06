@@ -1,4 +1,4 @@
-# MERN AI Image
+# MERN AI Image Generator
 
 ## Who doesn't want to see bears with ski masks in the lab:)
 
