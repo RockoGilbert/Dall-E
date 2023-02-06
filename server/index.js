@@ -1,32 +1,53 @@
 import express from 'express';
 import * as dotenv from 'dotenv';
 import cors from 'cors';
+import { Configuration, OpenAIApi } from 'openai';
+
 import connectDB from './mongodb/connect.js';
+
 import postRoutes from './routes/postRoutes.js';
 import dalleRoutes from './routes/dalleRoutes.js';
 
+
 dotenv.config();
+
+const router = express.Router();
+
+const configuration = new Configuration({
+    apiKey: process.env.OpenAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
 
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 
-app.use('/api/posts', postRoutes);
-app.use('/api/posts', dalleRoutes);
+app.use('/api/v1/posts', postRoutes);
+app.use('/api/v1/dalle', dalleRoutes);
 
 
 app.get('/', async (req, res) => {
     res.send('Hello from DALL-E!');
-});
+})
+
+// const startServer = async () => {
+//     try {
+//         connectDB(process.env.MONGODB_URL);
+//         app.listen(8080, () => console.log('Server has started on port https://localhost:8080'))
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }
 
 const startServer = async () => {
-
     try {
         connectDB(process.env.MONGODB_URL);
-        app.listen(8080, () => console.log('Server is listening on port http://localhost:8080'))
-    } catch (err) {
-        console.log(err);
+    } catch (error) {
+        console.error('Error connecting to database:', error);
+        return;
     }
-}
+
+    app.listen(8080, () => console.log('Server has started on port http://localhost:8080'));
+};
 
 startServer();
