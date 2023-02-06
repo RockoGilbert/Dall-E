@@ -25,7 +25,7 @@ const CreatePost = () => {
   };
 
   const generateImage = async () => {
-    console.log(form.prompt);
+    // console.log(form.prompt);
 
     if (form.prompt) {
       try {
@@ -54,17 +54,19 @@ const CreatePost = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    // http://dalle-arbb.onrender.com/api/v1/post
     if (form.prompt && form.photo) {
       setLoading(true);
       try {
-        const response = await fetch('http://dalle-arbb.onrender.com/api/v1/post', {
+
+        const response = await fetch('http://localhost:8080/api/v1/post', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ ...form }),
-        });
+          body: JSON.stringify(form)
+        })
+
 
         await response.json();
         alert('Success');
@@ -75,7 +77,7 @@ const CreatePost = () => {
         setLoading(false);
       }
     } else {
-      alert('Please generate an image with proper details');
+      alert('Please generate an image');
     }
   };
 
@@ -92,7 +94,7 @@ const CreatePost = () => {
             labelName="Your Name"
             type="text"
             name="name"
-            placeholder="Ex., john doe"
+            placeholder="john doe"
             value={form.name}
             handleChange={handleChange}
           />
